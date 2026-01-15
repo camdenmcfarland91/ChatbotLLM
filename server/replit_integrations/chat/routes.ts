@@ -59,60 +59,126 @@ export function registerChatRoutes(app: Express): void {
     }
   });
 
-  // Send message and get AI response (streaming)
-  app.post("/api/conversations/:id/messages", async (req: Request, res: Response) => {
-    try {
-      const conversationId = parseInt(req.params.id);
-      const { content } = req.body;
+    // Send message and get AI response (streaming)
+    app.post("/api/conversations/:id/messages", async (req: Request, res: Response) => {
+        try {
+            const conversationId = parseInt(req.params.id);
+            const { content } = req.body;
 
-      // Save user message
-      await chatStorage.createMessage(conversationId, "user", content);
+            // Save user message
+            await chatStorage.createMessage(conversationId, "user", content);
 
-      // Get conversation history for context
-      const messages = await chatStorage.getMessagesByConversation(conversationId);
-      const chatMessages = messages.map((m) => ({
-        role: m.role as "user" | "assistant",
-        content: m.content,
-      }));
+            // Get conversation history for context
+            const messages = await chatStorage.getMessagesByConversation(conversationId);
+            const chatMessages = messages.map((m) => ({
+                role: m.role as "user" | "assistant",
+                content: m.content,
+            }));
 
-      // Set up SSE
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
+            // Set up SSE
+            res.setHeader("Content-Type", "text/event-stream");
+            res.setHeader("Cache-Control", "no-cache");
+            res.setHeader("Connection", "keep-alive");
 
-      // Stream response from OpenAI
-      const stream = await openai.chat.completions.create({
-        model: "gpt-5.1",
-        messages: chatMessages,
-        stream: true,
-        max_completion_tokens: 2048,
-      });
+            // Define tools for weather and code
+            const tools: OpenAI.Chat.Completions.ChatCompletionTool[] = [
+                {
+                    type: "function",
+                    function: {
+                        name: "get_weather",
+                        description: "Get the current weather for a location",
+                        parameters: {
+                            type: "object",
+                            properties: {
+                                location: { type: "string", description: "The city and state, e.g. San Francisco, CA" },
+                            },
+                            required: ["location"],
+                        },
+                    },
+                },
+            ];
 
-      let fullResponse = "";
+            // Stream response from OpenAI
+            const stream = await openai.chat.completions.create({
+                model: "gpt-5.1",
+                messages: chatMessages,
+                tools,
+                stream: true,
+                max_completion_tokens: 2048,
+            });
 
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || "";
-        if (content) {
-          fullResponse += content;
-          res.write(`data: ${JSON.stringify({ content })}\n\n`);
+            let fullResponse = "";
+            let toolCalls: any[] = [];
+
+            for await (const chunk of stream) {
+                const delta = chunk.choices[0]?.delta;
+                const content = delta?.content || "";
+                
+                if (content) {
+                    fullResponse += content;
+                    res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                }
+
+                if (delta?.tool_calls) {
+                    for (const toolCall of delta.tool_calls) {
+                        if (toolCall.index !== undefined) {
+                            if (!toolCalls[toolCall.index]) {
+                                toolCalls[toolCall.index] = { id: toolCall.id, function: { name: "", arguments: "" } };
+                            }
+                            if (toolCall.id) toolCalls[toolCall.index].id = toolCall.id;
+                            if (toolCall.function?.name) toolCalls[toolCall.index].function.name += toolCall.function.name;
+                            if (toolCall.function?.arguments) toolCalls[toolCall.index].function.arguments += toolCall.function.arguments;
+                        }
+                    }
+                }
+            }
+
+            // Handle tool calls if any
+            if (toolCalls.length > 0) {
+                for (const toolCall of toolCalls) {
+                    if (toolCall.function.name === "get_weather") {
+                        const args = JSON.parse(toolCall.function.arguments);
+                        // Mock weather for now, could integrate a real API if key provided
+                        const weatherInfo = `The weather in ${args.location} is currently 22°C and sunny.`;
+                        
+                        chatMessages.push({ role: "assistant", content: null, tool_calls: toolCalls } as any);
+                        chatMessages.push({
+                            role: "tool",
+                            tool_call_id: toolCall.id,
+                            content: weatherInfo
+                        } as any);
+
+                        const secondResponse = await openai.chat.completions.create({
+                            model: "gpt-5.1",
+                            messages: chatMessages,
+                            stream: true,
+                        });
+
+                        for await (const chunk of secondResponse) {
+                            const content = chunk.choices[0]?.delta?.content || "";
+                            if (content) {
+                                fullResponse += content;
+                                res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Save assistant message
+            await chatStorage.createMessage(conversationId, "assistant", fullResponse);
+
+            res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+            res.end();
+        } catch (error) {
+            console.error("Error sending message:", error);
+            if (res.headersSent) {
+                res.write(`data: ${JSON.stringify({ error: "Failed to send message" })}\n\n`);
+                res.end();
+            } else {
+                res.status(500).json({ error: "Failed to send message" });
+            }
         }
-      }
-
-      // Save assistant message
-      await chatStorage.createMessage(conversationId, "assistant", fullResponse);
-
-      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
-      res.end();
-    } catch (error) {
-      console.error("Error sending message:", error);
-      // Check if headers already sent (SSE streaming started)
-      if (res.headersSent) {
-        res.write(`data: ${JSON.stringify({ error: "Failed to send message" })}\n\n`);
-        res.end();
-      } else {
-        res.status(500).json({ error: "Failed to send message" });
-      }
-    }
-  });
+    });
 }
 

@@ -18,6 +18,15 @@ export const api = {
         201: z.custom<typeof conversations.$inferSelect>(),
       },
     },
+    update: {
+      method: "PATCH" as const,
+      path: "/api/conversations/:id",
+      input: z.object({ title: z.string() }),
+      responses: {
+        200: z.custom<typeof conversations.$inferSelect>(),
+        404: z.object({ error: z.string() }),
+      },
+    },
     get: {
       method: "GET" as const,
       path: "/api/conversations/:id",

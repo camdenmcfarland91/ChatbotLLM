@@ -79,3 +79,25 @@ export function useDeleteConversation() {
     },
   });
 }
+
+// PATCH /api/conversations/:id
+export function useUpdateConversation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, title }: { id: number; title: string }) => {
+      const url = buildUrl(api.conversations.update.path, { id });
+      const res = await fetch(url, {
+        method: api.conversations.update.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      });
+      if (!res.ok) throw new Error("Failed to update conversation");
+      return api.conversations.update.responses[200].parse(await res.json());
+    },
+    onSuccess: (updated) => {
+      queryClient.invalidateQueries({ queryKey: [api.conversations.list.path] });
+      queryClient.invalidateQueries({ queryKey: [api.conversations.get.path, updated.id] });
+    },
+  });
+}

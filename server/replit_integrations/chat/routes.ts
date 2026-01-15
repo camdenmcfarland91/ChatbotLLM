@@ -47,6 +47,22 @@ export function registerChatRoutes(app: Express): void {
     }
   });
 
+  // Rename conversation
+  app.patch("/api/conversations/:id", async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { title } = req.body;
+      const conversation = await chatStorage.updateConversation(id, title);
+      if (!conversation) {
+        return res.status(404).json({ error: "Conversation not found" });
+      }
+      res.json(conversation);
+    } catch (error) {
+      console.error("Error updating conversation:", error);
+      res.status(500).json({ error: "Failed to update conversation" });
+    }
+  });
+
   // Delete conversation
   app.delete("/api/conversations/:id", async (req: Request, res: Response) => {
     try {

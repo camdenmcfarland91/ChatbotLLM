@@ -183,7 +183,8 @@ export default function Chat() {
 
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto scroll-smooth">
-          {(!id && !isLoadingConv) ? (
+          <div className="max-w-4xl mx-auto w-full">
+            {(!id && !isLoadingConv) ? (
             // Empty State / Welcome Screen
             <div className="h-full flex flex-col items-center justify-center p-8 text-center max-w-2xl mx-auto animate-in fade-in zoom-in duration-500">
               <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-primary/20">
@@ -234,6 +235,7 @@ export default function Chat() {
               <div ref={bottomRef} />
             </div>
           )}
+          </div>
         </div>
 
         {/* Input Area */}

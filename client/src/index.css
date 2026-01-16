@@ -5,10 +5,10 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Times New Roman', Times, serif;
+  --font-display: 'Times New Roman', Times, serif;
 
-  /* ChatGPT-inspired neutral palette with a premium feel */
+  /* Premium Gold & Deep Slate Palette */
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
 
@@ -18,8 +18,8 @@
   --popover: 0 0% 100%;
   --popover-foreground: 240 10% 3.9%;
 
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
+  --primary: 43 100% 50%; /* Golden Accent */
+  --primary-foreground: 0 0% 0%;
 
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
@@ -27,7 +27,7 @@
   --muted: 240 4.8% 95.9%;
   --muted-foreground: 240 3.8% 46.1%;
 
-  --accent: 240 4.8% 95.9%;
+  --accent: 43 100% 50%;
   --accent-foreground: 240 5.9% 10%;
 
   --destructive: 0 84.2% 60.2%;
@@ -35,17 +35,16 @@
 
   --border: 240 5.9% 90%;
   --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
+  --ring: 43 100% 50%;
 
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 
   /* Premium UI Enhancements */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(0, 0, 0, 0.1);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                   radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(43,100%,50%,0.05) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(240,10%,3.9%,0.05) 0, transparent 50%);
 }
 
 .dark {
@@ -58,8 +57,8 @@
   --popover: 240 10% 3.9%;
   --popover-foreground: 0 0% 98%;
 
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
+  --primary: 43 100% 50%; /* Golden Accent */
+  --primary-foreground: 240 5.9% 10%;
 
   --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
@@ -67,22 +66,21 @@
   --muted: 240 3.7% 15.9%;
   --muted-foreground: 240 5% 64.9%;
 
-  --accent: 217.2 91.2% 59.8%;
-  --accent-foreground: 222.2 47.4% 1.2%;
+  --accent: 43 100% 50%;
+  --accent-foreground: 0 0% 98%;
 
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
 
   --border: 240 3.7% 15.9%;
   --input: 240 3.7% 15.9%;
-  --ring: 217.2 91.2% 59.8%;
+  --ring: 43 100% 50%;
 
-  --glass-bg: rgba(15, 15, 15, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(20, 20, 20, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
-                   radial-gradient(at 50% 0%, hsla(225,39%,20%,1) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(339,49%,20%,1) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(43,100%,50%,0.1) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(0,0%,0%,0.3) 0, transparent 50%);
 }
 
 @layer base {
@@ -90,19 +88,30 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/20 selection:text-primary;
+    @apply bg-background text-foreground font-sans antialiased selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-sans);
+    font-stretch: condensed;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
-    @apply tracking-tight font-semibold text-foreground/90;
+    @apply tracking-tight font-bold text-foreground;
+    font-stretch: condensed;
   }
 }
 
 .glass-morphism {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.premium-border {
+  border: 1px solid transparent;
+  background-image: linear-gradient(var(--glass-bg), var(--glass-bg)), 
+                    linear-gradient(to right, var(--primary), transparent, var(--primary));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
 }
 
 /* Custom scrollbar for webkit */

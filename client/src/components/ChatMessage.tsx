@@ -23,24 +23,24 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       className={cn(
-        "flex w-full mb-8",
+        "flex w-full mb-10",
         isUser ? "justify-end" : "justify-start"
       )}
     >
       <div className={cn(
-        "max-w-[85%] md:max-w-[75%] px-6 py-4 rounded-3xl shadow-lg transition-all duration-300",
+        "max-w-[85%] md:max-w-[80%] px-7 py-5 rounded-2xl shadow-2xl transition-all duration-500 premium-border",
         isUser 
-          ? "bg-primary text-primary-foreground rounded-tr-sm shadow-primary/20" 
-          : "glass-morphism rounded-tl-sm text-foreground/90 shadow-sm"
+          ? "bg-primary text-primary-foreground shadow-primary/30 font-bold" 
+          : "glass-morphism text-foreground/95 shadow-black/40"
       )}>
         {!isUser && (
-          <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-primary/80">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>AI Assistant</span>
+          <div className="flex items-center gap-2 mb-3 text-[10px] uppercase tracking-[0.2em] font-black text-primary animate-pulse">
+            <Sparkles className="w-4 h-4" />
+            <span>Premium Intelligence</span>
           </div>
         )}
         

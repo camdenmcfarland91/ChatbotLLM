@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useVoiceRecorder, useVoiceStream } from "../../replit_integrations/audio";
 
 export default function Chat() {
@@ -158,18 +159,26 @@ export default function Chat() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative">
         {/* Mobile Header */}
-        <div className="md:hidden flex items-center p-4 border-b border-border bg-background/95 backdrop-blur z-10 sticky top-0">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="-ml-2">
-                <Menu className="w-5 h-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="p-0 w-[280px]">
-              <Sidebar className="w-full border-none" />
-            </SheetContent>
-          </Sheet>
-          <span className="font-semibold ml-2">Chat AI</span>
+        <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background/95 backdrop-blur z-10 sticky top-0">
+          <div className="flex items-center gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="-ml-2">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="p-0 w-[280px]">
+                <Sidebar className="w-full border-none" />
+              </SheetContent>
+            </Sheet>
+            <span className="font-semibold">Chat AI</span>
+          </div>
+          <ThemeToggle />
+        </div>
+
+        {/* Desktop Header (New) */}
+        <div className="hidden md:flex items-center justify-end p-4 border-b border-border/40 bg-background/50 backdrop-blur-sm z-10 sticky top-0">
+          <ThemeToggle />
         </div>
 
         {/* Messages Area */}
@@ -230,13 +239,13 @@ export default function Chat() {
         {/* Input Area */}
         <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background via-background to-transparent pb-6 pt-10 px-4">
           <div className="max-w-3xl mx-auto">
-            <div className="relative flex items-end gap-2 bg-secondary/30 border border-border rounded-2xl p-2 shadow-lg backdrop-blur-sm focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all">
+            <div className="relative flex items-end gap-2 glass-morphism rounded-2xl p-2 shadow-2xl focus-within:ring-2 focus-within:ring-primary/10 focus-within:border-primary/30 transition-all duration-300">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Message AI..."
-                className="min-h-[50px] max-h-[200px] border-0 focus-visible:ring-0 resize-none py-3 px-3 bg-transparent text-base"
+                className="min-h-[50px] max-h-[200px] border-0 focus-visible:ring-0 resize-none py-3 px-3 bg-transparent text-base placeholder:text-muted-foreground/50"
                 rows={1}
               />
               

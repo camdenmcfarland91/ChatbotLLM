@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { Send, StopCircle, RefreshCw, Zap } from "lucide-react";
+import { Send, StopCircle, RefreshCw, Zap, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
 import { useConversation, useCreateConversation } from "@/hooks/use-conversations";
 import { useChatStream } from "@/hooks/use-chat-stream";
 import { Sidebar } from "@/components/Sidebar";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { useVoiceRecorder, useVoiceStream } from "../../replit_integrations/audio";
 
 export default function Chat() {
   const { id: idParam } = useParams();
@@ -19,7 +20,7 @@ export default function Chat() {
   const bottomRef = useRef<HTMLDivElement>(null);
   
   const createConversation = useCreateConversation();
-  const { data: conversation, isLoading: isLoadingConv, isError } = useConversation(id);
+  const { data: conversation, isLoading: isLoadingConv, isError, refetch: refetchConversation } = useConversation(id);
   
   // Custom stream hook for handling real-time responses
   const { 
@@ -29,12 +30,43 @@ export default function Chat() {
     streamingContent 
   } = useChatStream(id || 0);
 
+  // Voice Chat hooks
+  const recorder = useVoiceRecorder();
+  const [isVoiceMode, setIsVoiceMode] = useState(false);
+  const voiceStream = useVoiceStream({
+    onUserTranscript: (text) => {
+      // User transcript handled by server
+    },
+    onComplete: () => {
+      refetchConversation();
+    }
+  });
+
+  const handleVoiceToggle = async () => {
+    if (recorder.state === "recording") {
+      const blob = await recorder.stopRecording();
+      if (id) {
+        await voiceStream.streamVoiceResponse(`/api/conversations/${id}/voice-stream`, blob);
+      } else {
+        // Handle new conversation with voice
+        try {
+          const newConv = await createConversation.mutateAsync({ title: "Voice Chat" });
+          await voiceStream.streamVoiceResponse(`/api/conversations/${newConv.id}/voice-stream`, blob);
+        } catch (err) {
+          console.error("Failed to start voice chat", err);
+        }
+      }
+    } else {
+      await recorder.startRecording();
+    }
+  };
+
   // Auto-scroll to bottom when new content arrives
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }, [conversation?.messages, streamingContent, isStreaming]);
+  }, [conversation?.messages, streamingContent, isStreaming, voiceStream.playbackState]);
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -208,7 +240,21 @@ export default function Chat() {
                 rows={1}
               />
               
-              <div className="pb-1 pr-1">
+              <div className="pb-1 pr-1 flex gap-2">
+                <Button
+                  size="icon"
+                  variant="ghost"
+                  className={cn(
+                    "h-10 w-10 rounded-xl transition-all duration-200",
+                    recorder.state === "recording" 
+                      ? "bg-red-500/10 text-red-500 animate-pulse" 
+                      : "text-muted-foreground hover:bg-secondary"
+                  )}
+                  onClick={handleVoiceToggle}
+                >
+                  {recorder.state === "recording" ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                </Button>
+
                 {isStreaming ? (
                   <Button 
                     size="icon" 

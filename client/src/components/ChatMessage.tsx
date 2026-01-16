@@ -36,7 +36,11 @@ export function ChatMessage({ role, content, isStreaming }: ChatMessageProps) {
         isUser 
           ? "bg-primary text-primary-foreground shadow-primary/30 font-bold" 
           : "glass-morphism text-foreground/95 shadow-black/40"
-      )}>
+      )}
+      style={{
+        fontFamily: isUser ? "var(--font-comic)" : "var(--font-times)",
+        fontStretch: isUser ? "normal" : "condensed"
+      }}>
         {!isUser && (
           <div className="flex items-center gap-2 mb-3 text-[10px] uppercase tracking-[0.2em] font-black text-primary animate-pulse">
             <Sparkles className="w-4 h-4" />

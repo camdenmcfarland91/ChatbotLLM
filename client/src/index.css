@@ -5,82 +5,84 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Times New Roman', Times, serif;
-  --font-display: 'Times New Roman', Times, serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-comic: 'Comic Sans MS', 'Comic Sans', cursive;
+  --font-times: 'Times New Roman', Times, serif;
 
-  /* Premium Gold & Deep Slate Palette */
+  /* Premium Blue Palette */
   --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
+  --foreground: 222.2 84% 4.9%;
 
   --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
+  --card-foreground: 222.2 84% 4.9%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
+  --popover-foreground: 222.2 84% 4.9%;
 
-  --primary: 43 100% 50%; /* Golden Accent */
-  --primary-foreground: 0 0% 0%;
+  --primary: 221.2 83.2% 53.3%; /* Premium Blue */
+  --primary-foreground: 210 40% 98%;
 
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
 
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
-  --accent: 43 100% 50%;
-  --accent-foreground: 240 5.9% 10%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
 
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
+  --destructive-foreground: 210 40% 98%;
 
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 43 100% 50%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 221.2 83.2% 53.3%;
 
-  --radius: 0.5rem;
+  --radius: 0.75rem;
 
   /* Premium UI Enhancements */
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.08);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(43,100%,50%,0.05) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(240,10%,3.9%,0.05) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(221,83%,53%,0.05) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(222,84%,5%,0.05) 0, transparent 50%);
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
 
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
 
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
 
-  --primary: 43 100% 50%; /* Golden Accent */
-  --primary-foreground: 240 5.9% 10%;
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
 
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
 
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
 
-  --accent: 43 100% 50%;
-  --accent-foreground: 0 0% 98%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
 
   --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
+  --destructive-foreground: 210 40% 98%;
 
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 43 100% 50%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 224.3 76.3% 48%;
 
-  --glass-bg: rgba(20, 20, 20, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(15, 15, 15, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.05);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(43,100%,50%,0.1) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(0,0%,0%,0.3) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(217,91%,60%,0.1) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(222,84%,5%,0.3) 0, transparent 50%);
 }
 
 @layer base {

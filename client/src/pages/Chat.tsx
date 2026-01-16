@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { Send, StopCircle, RefreshCw, Zap, Mic, MicOff, Volume2, VolumeX } from "lucide-react";
+import { Send, StopCircle, RefreshCw, Zap, Mic, MicOff, Volume2, VolumeX, PanelLeftOpen, PanelLeftClose } from "lucide-react";
 import { useConversation, useCreateConversation } from "@/hooks/use-conversations";
 import { useChatStream } from "@/hooks/use-chat-stream";
 import { Sidebar } from "@/components/Sidebar";
@@ -19,6 +19,7 @@ export default function Chat() {
   const [input, setInput] = useState("");
   const [, setLocation] = useLocation();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   
   const createConversation = useCreateConversation();
   const { data: conversation, isLoading: isLoadingConv, isError, refetch: refetchConversation } = useConversation(id);
@@ -154,10 +155,27 @@ export default function Chat() {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Desktop Sidebar */}
-      <Sidebar className="hidden md:flex w-[260px] shrink-0" />
+      <div className={cn(
+        "hidden md:flex flex-col transition-all duration-300 ease-in-out border-r border-border/40",
+        sidebarOpen ? "w-[260px]" : "w-0 overflow-hidden border-none"
+      )}>
+        <Sidebar className="w-[260px]" />
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0 relative">
+        {/* Desktop Sidebar Toggle */}
+        <div className="hidden md:block absolute left-4 top-4 z-20">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="glass-morphism h-9 w-9 rounded-lg"
+          >
+            {sidebarOpen ? <PanelLeftClose className="h-5 w-5" /> : <PanelLeftOpen className="h-5 w-5" />}
+          </Button>
+        </div>
+
         {/* Mobile Header */}
         <div className="md:hidden flex items-center justify-between p-4 border-b border-border bg-background/95 backdrop-blur z-10 sticky top-0">
           <div className="flex items-center gap-2">

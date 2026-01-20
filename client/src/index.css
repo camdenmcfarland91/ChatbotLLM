@@ -11,7 +11,7 @@
   --font-times: 'Times New Roman', Times, serif;
 
   /* Premium Blue Palette */
-  --background: 0 0% 100%;
+  --background: 220 33% 98%;
   --foreground: 222.2 84% 4.9%;
 
   --card: 0 0% 100%;
@@ -39,24 +39,25 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 221.2 83.2% 53.3%;
 
-  --radius: 0.75rem;
+  --radius: 1rem;
 
   /* Premium UI Enhancements */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.6);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(221,83%,53%,0.05) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(222,84%,5%,0.05) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(221,83%,53%,0.1) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(280,84%,60%,0.1) 0, transparent 50%),
+                   radial-gradient(at 50% 100%, hsla(200,80%,50%,0.1) 0, transparent 50%);
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
+  --background: 230 25% 6%;
   --foreground: 210 40% 98%;
 
-  --card: 222.2 84% 4.9%;
+  --card: 230 25% 8%;
   --card-foreground: 210 40% 98%;
 
-  --popover: 222.2 84% 4.9%;
+  --popover: 230 25% 8%;
   --popover-foreground: 210 40% 98%;
 
   --primary: 217.2 91.2% 59.8%;
@@ -78,11 +79,12 @@
   --input: 217.2 32.6% 17.5%;
   --ring: 224.3 76.3% 48%;
 
-  --glass-bg: rgba(15, 15, 15, 0.6);
+  --glass-bg: rgba(10, 10, 15, 0.4);
   --glass-border: rgba(255, 255, 255, 0.05);
 
-  --mesh-gradient: radial-gradient(at 0% 0%, hsla(217,91%,60%,0.1) 0, transparent 50%), 
-                   radial-gradient(at 100% 0%, hsla(222,84%,5%,0.3) 0, transparent 50%);
+  --mesh-gradient: radial-gradient(at 0% 0%, hsla(217,91%,60%,0.15) 0, transparent 50%), 
+                   radial-gradient(at 100% 0%, hsla(280,80%,50%,0.15) 0, transparent 50%),
+                   radial-gradient(at 50% 100%, hsla(210,100%,50%,0.1) 0, transparent 50%);
 }
 
 @layer base {
@@ -92,6 +94,8 @@
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-sans);
+    background-image: var(--mesh-gradient);
+    background-attachment: fixed;
     font-stretch: condensed;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -105,7 +109,7 @@
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
 .premium-border {

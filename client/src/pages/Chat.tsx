@@ -275,15 +275,15 @@ export default function Chat() {
         </div>
 
         {/* Input Area */}
-        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background via-background/80 to-transparent pb-8 pt-12 px-6">
+        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-background via-background/80 to-transparent pb-10 pt-16 px-6">
           <div className="max-w-4xl mx-auto">
-            <div className="relative flex items-end gap-3 glass-morphism rounded-xl p-3 shadow-2xl premium-border focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-500 group">
+            <div className="relative flex items-end gap-3 glass-morphism rounded-[2rem] p-4 shadow-2xl premium-border focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-500 group">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask your premium assistant..."
-                className="min-h-[60px] max-h-[250px] border-0 focus-visible:ring-0 resize-none py-4 px-4 bg-transparent text-lg placeholder:text-muted-foreground/30 font-medium tracking-tight"
+                placeholder="Talk to your premium assistant..."
+                className="min-h-[60px] max-h-[250px] border-0 focus-visible:ring-0 resize-none py-4 px-4 bg-transparent text-lg placeholder:text-muted-foreground/20 font-medium tracking-tight"
                 rows={1}
               />
               

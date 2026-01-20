@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { Send, StopCircle, RefreshCw, Zap, Mic, MicOff, Volume2, VolumeX, PanelLeftOpen, PanelLeftClose } from "lucide-react";
+import { Send, StopCircle, RefreshCw, Zap, Mic, MicOff, Volume2, VolumeX, PanelLeftOpen, PanelLeftClose, Info } from "lucide-react";
 import { useConversation, useCreateConversation } from "@/hooks/use-conversations";
 import { useChatStream } from "@/hooks/use-chat-stream";
 import { Sidebar } from "@/components/Sidebar";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { Progress } from "@/components/ui/progress";
 import { useVoiceRecorder, useVoiceStream } from "../../replit_integrations/audio";
 
 export default function Chat() {
@@ -195,7 +196,24 @@ export default function Chat() {
         </div>
 
         {/* Desktop Header (New) */}
-        <div className="hidden md:flex items-center justify-end p-4 border-b border-border/40 bg-background/50 backdrop-blur-sm z-10 sticky top-0">
+        <div className="hidden md:flex items-center justify-between p-4 border-b border-border/40 bg-background/50 backdrop-blur-sm z-10 sticky top-0">
+          <div className="flex-1 max-w-xl mx-auto px-12">
+            {id && conversation && (
+              <div className="flex flex-col gap-2 animate-in fade-in duration-500">
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-widest font-bold text-muted-foreground/60">
+                  <div className="flex items-center gap-1.5">
+                    <Zap className="w-3 h-3 text-primary" />
+                    <span>Context Window</span>
+                  </div>
+                  <span>{Math.round((JSON.stringify(conversation.messages).length / 4) / 1000)}k / 128k Tokens</span>
+                </div>
+                <Progress 
+                  value={(JSON.stringify(conversation.messages).length / 4) / 128000 * 100} 
+                  className="h-1 bg-secondary shadow-inner"
+                />
+              </div>
+            )}
+          </div>
           <ThemeToggle />
         </div>
 
